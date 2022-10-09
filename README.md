@@ -21,7 +21,7 @@
 
 ---
 
-## Usage
+## Usage - searching for data
 
 ### Searching in EU-provided Taric files
 
@@ -40,3 +40,7 @@
 ### Searching in CDS-provided files (UK tariff)
 
 - `python3 xpath.py m 20138293 cds` (searches for measure with SID 20138293 in UK files)
+
+## Usage - linting raw data
+
+- `python3 linter.py`
