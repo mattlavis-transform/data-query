@@ -1,4 +1,4 @@
-# Download and parse files from the CDS download service
+# Data query on UK CDS, UK Taric and EU TGB files
 
 ## Implementation steps
 
@@ -9,22 +9,11 @@
 
 ### Environment variable settings
 
-#### Connectivity to download server
-
-- domain=STRING
-- client_secret=STRING
-- client_id=STRING
-
-#### Data
-
-- DATABASE_UK=DATABASE CONNECTION STRING
-- IMPORT_FOLDER=STRING
-- OVERWRITE_XLSX=1 | 0
-
-#### Data queries
+#### Data query - file locations
 
 - DIT_DATA_FOLDER=STRING
 - TGB_DATA_FOLDER=STRING
+- CDS_DATA_FOLDER=STRING
 
 ### Environment variable settings
 
@@ -46,4 +35,8 @@
 - `python3 xpath.py m 20138293 dit` (searches for measure with SID 20138293 in UK files)
 - `python3 xpath.py c 2933199070 dit` (searches for commodity with code 2933199070 in UK files)
 - `python3 xpath.py mt 750 dit` (searches for measures of type 750 in UK files)
-   `python3 xpath.py g AL dit` (searches for measures on geo area AL in UK files)
+- `python3 xpath.py g AL dit` (searches for measures on geo area AL in UK files)
+
+### Searching in CDS-provided files (UK tariff)
+
+- `python3 xpath.py m 20138293 dit` (searches for measure with SID 20138293 in UK files)
