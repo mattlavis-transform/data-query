@@ -39,4 +39,4 @@
 
 ### Searching in CDS-provided files (UK tariff)
 
-- `python3 xpath.py m 20138293 dit` (searches for measure with SID 20138293 in UK files)
+- `python3 xpath.py m 20138293 cds` (searches for measure with SID 20138293 in UK files)
