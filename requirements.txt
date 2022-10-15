@@ -1,7 +1,14 @@
 autopep8==1.7.0
+blessed==1.19.1
+colorama==0.4.5
 flake8==5.0.4
+inquirer==2.10.0
 mccabe==0.7.0
 pycodestyle==2.9.1
 pyflakes==2.5.0
 python-dotenv==0.21.0
+python-editor==1.0.4
+readchar==4.0.3
+six==1.16.0
 toml==0.10.2
+wcwidth==0.2.5

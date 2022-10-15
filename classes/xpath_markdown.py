@@ -1,3 +1,4 @@
+import subprocess
 import os
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -27,8 +28,9 @@ class XpathMarkdown(object):
         else:
             parent_folder = tgb_folder
 
-        self.commodities_folder = os.path.join(parent_folder, "commodities")
         self.measures_folder = os.path.join(parent_folder, "measures")
+        self.measure_conditions_folder = os.path.join(parent_folder, "measure_conditions")
+        self.commodities_folder = os.path.join(parent_folder, "commodities")
         self.measure_types_folder = os.path.join(parent_folder, "measure_types")
         self.geographical_areas_folder = os.path.join(parent_folder, "geographical_areas")
         self.commodity_measures_folder = os.path.join(parent_folder, "commodity_measures")
@@ -38,8 +40,9 @@ class XpathMarkdown(object):
         self.make_folder(cds_folder)
         self.make_folder(tgb_folder)
 
-        self.make_folder(self.commodities_folder)
         self.make_folder(self.measures_folder)
+        self.make_folder(self.measure_conditions_folder)
+        self.make_folder(self.commodities_folder)
         self.make_folder(self.measure_types_folder)
         self.make_folder(self.geographical_areas_folder)
         self.make_folder(self.commodity_measures_folder)
@@ -52,10 +55,12 @@ class XpathMarkdown(object):
 
     def get_filename(self):
         self.filename = "{qc}_{qid}.md".format(qc=self.query_class, qid=self.query_id)
-        if self.query_class == "commodity":
-            self.filepath = os.path.join(self.commodities_folder, self.filename)
-        elif self.query_class == "measure":
+        if self.query_class == "measure":
             self.filepath = os.path.join(self.measures_folder, self.filename)
+        elif self.query_class == "measure_condition":
+            self.filepath = os.path.join(self.measure_conditions_folder, self.filename)
+        elif self.query_class == "commodity":
+            self.filepath = os.path.join(self.commodities_folder, self.filename)
         elif self.query_class == "measure_type":
             self.filepath = os.path.join(self.measure_types_folder, self.filename)
         elif self.query_class == "geographical_area":
@@ -64,10 +69,13 @@ class XpathMarkdown(object):
             self.filepath = os.path.join(self.commodity_measures_folder, self.filename)
 
     def write_markdown(self):
-        if self.query_class == "commodity":
-            self.write_markdown_commodity()
-        elif self.query_class == "measure":
+        self.get_unique_filenames()
+        if self.query_class == "measure":
             self.write_markdown_measure()
+        elif self.query_class == "measure_condition":
+            self.write_markdown_measure_condition()
+        elif self.query_class == "commodity":
+            self.write_markdown_commodity()
         elif self.query_class == "measure_type":
             self.write_markdown_measure_type()
         elif self.query_class == "geographical_area":
@@ -75,29 +83,7 @@ class XpathMarkdown(object):
         elif self.query_class == "commodity_measure":
             self.write_markdown_commodity_measure()
 
-    def write_markdown_commodity(self):
-        self.get_unique_filenames()
-        self.markdown += "# Instances of commodity code {item}\n\n".format(item=self.query_id)
-        self.markdown += "## Files containing item\n\n"
-        for filename in self.unique_filenames:
-            self.markdown += "- {item}\n".format(item=filename)
-
-        self.markdown += "\n## Instances\n\n"
-        for record in self.records:
-            self.markdown += "### {filename}\n\n".format(filename=record[0])
-            self.markdown += "- Transaction ID = {item}\n".format(item=record[4])
-            self.markdown += "- Commodity code = {item}\n".format(item=record[1])
-            self.markdown += "- PLS = {item}\n".format(item=record[3])
-            self.markdown += "- SID = {item}\n".format(item=record[2])
-            self.markdown += "- Start date = {item}\n".format(item=record[5])
-            self.markdown += "- End date = {item}\n\n".format(item=record[6])
-
-        f = open(self.filepath, "w")
-        f.write(self.markdown)
-        f.close()
-
     def write_markdown_measure(self):
-        self.get_unique_filenames()
         self.markdown += "# Instances of measure SID {item}\n\n".format(item=self.query_id)
         self.markdown += "## Files containing item\n\n"
         for filename in self.unique_filenames:
@@ -114,12 +100,66 @@ class XpathMarkdown(object):
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
 
-        f = open(self.filepath, "w")
-        f.write(self.markdown)
-        f.close()
+        self.write_report()
+
+    def write_markdown_measure_condition(self):
+        self.markdown += "# Instances of measure condition SID {item}\n\n".format(item=self.query_id)
+        self.markdown += "## Files containing item\n\n"
+        for filename in self.unique_filenames:
+            self.markdown += "- {item}\n".format(item=filename)
+
+        self.markdown += "\n## Instances\n\n"
+        unique_measures = []
+        unique_conditions = []
+        conditions_and_measures = []
+        for record in self.records:
+            self.markdown += "### {item}\n\n".format(item=record[0])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Measure SID = {item}\n".format(item=record[3])
+            self.markdown += "- Measure condition SID = {item}\n".format(item=record[4])
+            self.markdown += "- Condition code = {item}\n".format(item=record[5])
+            self.markdown += "- Component sequence number = {item}\n".format(item=record[6])
+            self.markdown += "- Action code = {item}\n".format(item=record[7])
+            self.markdown += "- Certificate type code = {item}\n".format(item=record[8])
+            self.markdown += "- Certificate code = {item}\n\n".format(item=record[9])
+            
+            combined = record[4] + " : " + record[3]
+            if record[3] not in unique_measures:
+                unique_measures.append(record[3])
+
+            unique_conditions.append(record[4])
+            conditions_and_measures.append(combined)
+        
+        self.markdown += "Measures\n\n"
+        self.markdown += ",".join(unique_measures)
+
+        self.markdown += "\n\nMeasure conditions\n\n"
+        self.markdown += ",".join(unique_conditions)
+
+        self.markdown += "\n\nMeasures and conditions\n\n"
+        self.markdown += "\n".join(conditions_and_measures)
+
+        self.write_report()
+
+    def write_markdown_commodity(self):
+        self.markdown += "# Instances of commodity code {item}\n\n".format(item=self.query_id)
+        self.markdown += "## Files containing item\n\n"
+        for filename in self.unique_filenames:
+            self.markdown += "- {item}\n".format(item=filename)
+
+        self.markdown += "\n## Instances\n\n"
+        for record in self.records:
+            self.markdown += "### {filename}\n\n".format(filename=record[0])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[4])
+            self.markdown += "- Commodity code = {item}\n".format(item=record[1])
+            self.markdown += "- PLS = {item}\n".format(item=record[3])
+            self.markdown += "- SID = {item}\n".format(item=record[2])
+            self.markdown += "- Start date = {item}\n".format(item=record[5])
+            self.markdown += "- End date = {item}\n\n".format(item=record[6])
+
+        self.write_report()
 
     def write_markdown_measure_type(self):
-        self.get_unique_filenames()
         self.markdown += "# Instances of measure type {item}\n\n".format(item=self.query_id)
         self.markdown += "## Files containing item\n\n"
         for filename in self.unique_filenames:
@@ -137,12 +177,9 @@ class XpathMarkdown(object):
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
 
-        f = open(self.filepath, "w")
-        f.write(self.markdown)
-        f.close()
+        self.write_report()
 
     def write_markdown_geographical_area(self):
-        self.get_unique_filenames()
         self.markdown += "# Instances of measures applied to geographical area {item}\n\n".format(item=self.query_id)
         self.markdown += "## Files containing item\n\n"
         for filename in self.unique_filenames:
@@ -160,12 +197,9 @@ class XpathMarkdown(object):
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
 
-        f = open(self.filepath, "w")
-        f.write(self.markdown)
-        f.close()
+        self.write_report()
 
     def write_markdown_commodity_measure(self):
-        self.get_unique_filenames()
         self.markdown += "# Instances of measures applied to commodity code {item}\n\n".format(item=self.query_id)
         self.markdown += "## Files containing item\n\n"
         for filename in self.unique_filenames:
@@ -183,12 +217,19 @@ class XpathMarkdown(object):
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
 
-        f = open(self.filepath, "w")
-        f.write(self.markdown)
-        f.close()
+        self.write_report()
 
     def get_unique_filenames(self):
         self.unique_filenames = []
         for record in self.records:
             if record[0] not in self.unique_filenames:
                 self.unique_filenames.append(record[0])
+
+    def write_report(self):
+        f = open(self.filepath, "w")
+        f.write(self.markdown)
+        f.close()
+
+    def load_in_code(self):
+        code_call = "code -r '{data_file}'".format(data_file=self.filepath)
+        os.system(code_call)
