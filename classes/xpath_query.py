@@ -21,21 +21,24 @@ class XpathQuery(object):
             self.query_tool = XpathQueryTaric(self.filename, self.query_class, self.query_id, self.scope)
 
     def run_query(self):
+        process = True
         try:
             root = ET.parse(self.filename)
         except Exception as e:
-            print(self.filename)
-            sys.exit()
-        if self.query_class == "measure":
-            ret = self.query_tool.run_query_measure(root)
-        elif self.query_class == "measure_condition":
-            ret = self.query_tool.run_query_measure_condition(root)
-        elif self.query_class == "commodity":
-            ret = self.query_tool.run_query_commodity(root)
-        elif self.query_class == "measure_type":
-            ret = self.query_tool.run_query_measure_type(root)
-        elif self.query_class == "geographical_area":
-            ret = self.query_tool.run_query_geographical_area(root)
-        elif self.query_class == "commodity_measure":
-            ret = self.query_tool.run_query_commodity_measure(root)
-        return ret
+            print("Exception", self.filename)
+            process = False
+
+        if process:
+            if self.query_class == "measure":
+                ret = self.query_tool.run_query_measure(root)
+            elif self.query_class == "measure_condition":
+                ret = self.query_tool.run_query_measure_condition(root)
+            elif self.query_class == "commodity":
+                ret = self.query_tool.run_query_commodity(root)
+            elif self.query_class == "measure_type":
+                ret = self.query_tool.run_query_measure_type(root)
+            elif self.query_class == "geographical_area":
+                ret = self.query_tool.run_query_geographical_area(root)
+            elif self.query_class == "commodity_measure":
+                ret = self.query_tool.run_query_commodity_measure(root)
+            return ret

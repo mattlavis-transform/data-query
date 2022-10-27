@@ -28,7 +28,8 @@ records = []
 for filename in files:
     xpq = XpathQuery(filename, query_class, query_id, scope)
     ret = xpq.run_query()
-    records += ret
+    if ret is not None:
+        records += ret
 
 xpm = XpathMarkdown(records, query_class, query_id, scope)
 xpm.write_markdown()
