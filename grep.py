@@ -3,11 +3,15 @@ import os
 import sys
 import string
 from codecs import decode
+from dotenv import load_dotenv
 
+
+load_dotenv('.env')
 
 # Get the argument
 if len(sys.argv) > 1:
-    xml_path = os.path.join(os.getcwd(), "resources", "xml")
+    xml_path = os.getenv('DIT_DATA_FOLDER')
+    # xml_path = os.path.join(os.getcwd(), "resources", "xml")
     if len(sys.argv) > 2:
         try:
             add_chevrons = int(sys.argv[2])
