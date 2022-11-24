@@ -18,6 +18,8 @@ def cater_for_shortcuts(query_class):
         query_class = "geographical_area"
     elif query_class in ("cm", "mc", "measure_commodity"):
         query_class = "commodity_measure"
+    elif query_class in ("q", "quotas"):
+        query_class = "quota"
     return query_class
 
 def cleanse_scope(scope):
@@ -68,15 +70,16 @@ def get_config_variables():
             "DIT data files",
             "CDS data files",
             "EU TGB data files"
-            ]),
+        ]),
         inquirer.List("query_class", carousel=True, message="Look in {scope} for which type of data?", choices=[
             "Measures",
             "Measure conditions",
             "Measure types",
             "Commodities",
             "Geographical areas",
-            "Commodity measures"
-            ]),
+            "Commodity measures",
+            "Quotas"
+        ]),
         inquirer.Text("entity", message="What entity are you looking for?")
     ]
 
@@ -105,7 +108,8 @@ def get_query_class_from_enquirer(s):
         "Measure types": "measure_type",
         "Commodities": "commodity",
         "Geographical areas": "geographical_area",
-        "Commodity measures": "commodity_measure"
+        "Commodity measures": "commodity_measure",
+        "Quotas": "quota"
     }
     return scopes[s]
 
@@ -115,4 +119,3 @@ def clear():
         _ = system('cls')
     else:
         _ = system("printf '\33c\e[3J'")
-

@@ -41,4 +41,6 @@ class XpathQuery(object):
                 ret = self.query_tool.run_query_geographical_area(root)
             elif self.query_class == "commodity_measure":
                 ret = self.query_tool.run_query_commodity_measure(root)
+            elif self.query_class == "quota":
+                ret = self.query_tool.run_query_quota(root)
             return ret

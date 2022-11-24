@@ -135,6 +135,20 @@ class XpathQueryCds(object):
             ret.append(obj)
         return ret
 
+    def run_query_quota(self, root):
+        ret = []
+        self.query = ".//QuotaOrderNumber[quotaOrderNumberId = '{item}']/..".format(item=self.query_id)
+        for elem in root.findall(self.query, self.namespaces):
+            transaction_id = "n/a"
+            quota_order_number_sid = self.get_value(elem, "sid")
+            validity_start_date = self.get_value(elem, "validityStartDate")
+            validity_end_date = self.get_value(elem, "validityEndDate")
+            filename = Path(self.filename).stem
+            obj = (filename, self.query_id, transaction_id, quota_order_number_sid,
+                   validity_start_date, validity_end_date)
+            ret.append(obj)
+        return ret
+
     def get_value(self, elem, query):
         obj = elem.find(query, self.namespaces)
         if obj is None:

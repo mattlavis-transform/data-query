@@ -10,9 +10,9 @@ import classes.functions as f
 f.clear()
 if len(sys.argv) < 4:
     ret = f.get_config_variables()
+    scope = ret[0]
     query_class = ret[1]
     query_id = ret[2]
-    scope = ret[0]
 else:
     query_class = sys.argv[1]
     query_id = sys.argv[2]

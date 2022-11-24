@@ -34,6 +34,7 @@ class XpathMarkdown(object):
         self.measure_types_folder = os.path.join(parent_folder, "measure_types")
         self.geographical_areas_folder = os.path.join(parent_folder, "geographical_areas")
         self.commodity_measures_folder = os.path.join(parent_folder, "commodity_measures")
+        self.quotas_folder = os.path.join(parent_folder, "quotas")
 
         self.make_folder(queries_folder)
         self.make_folder(dit_folder)
@@ -46,6 +47,7 @@ class XpathMarkdown(object):
         self.make_folder(self.measure_types_folder)
         self.make_folder(self.geographical_areas_folder)
         self.make_folder(self.commodity_measures_folder)
+        self.make_folder(self.quotas_folder)
 
     def make_folder(self, folder):
         try:
@@ -67,6 +69,8 @@ class XpathMarkdown(object):
             self.filepath = os.path.join(self.geographical_areas_folder, self.filename)
         elif self.query_class == "commodity_measure":
             self.filepath = os.path.join(self.commodity_measures_folder, self.filename)
+        elif self.query_class == "quota":
+            self.filepath = os.path.join(self.quotas_folder, self.filename)
 
     def write_markdown(self):
         self.get_unique_filenames()
@@ -82,6 +86,8 @@ class XpathMarkdown(object):
             self.write_markdown_geographical_area()
         elif self.query_class == "commodity_measure":
             self.write_markdown_commodity_measure()
+        elif self.query_class == "quota":
+            self.write_markdown_quota()
 
     def write_markdown_measure(self):
         self.markdown += "# Instances of measure SID {item}\n\n".format(item=self.query_id)
@@ -122,14 +128,14 @@ class XpathMarkdown(object):
             self.markdown += "- Action code = {item}\n".format(item=record[7])
             self.markdown += "- Certificate type code = {item}\n".format(item=record[8])
             self.markdown += "- Certificate code = {item}\n\n".format(item=record[9])
-            
+
             combined = record[4] + " : " + record[3]
             if record[3] not in unique_measures:
                 unique_measures.append(record[3])
 
             unique_conditions.append(record[4])
             conditions_and_measures.append(combined)
-        
+
         self.markdown += "Measures\n\n"
         self.markdown += ",".join(unique_measures)
 
@@ -216,6 +222,22 @@ class XpathMarkdown(object):
             self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
+
+        self.write_report()
+
+    def write_markdown_quota(self):
+        self.markdown += "# Instances of quota order number {item}\n\n".format(item=self.query_id)
+        self.markdown += "## Files containing item\n\n"
+        for filename in self.unique_filenames:
+            self.markdown += "- {item}\n".format(item=filename)
+
+        self.markdown += "\n## Instances\n\n"
+        for record in self.records:
+            self.markdown += "### {item}\n\n".format(item=record[0])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[1])
+            self.markdown += "- Quota order number SID = {item}\n".format(item=record[2])
+            self.markdown += "- Start date = {item}\n".format(item=record[4])
+            self.markdown += "- End date = {item}\n".format(item=record[5])
 
         self.write_report()
 
