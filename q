@@ -1,2 +1,2 @@
 #!/bin/sh
-python query.py
+python3 query.py
