@@ -32,8 +32,10 @@ class XpathQueryTaric(object):
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
             ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, transaction_id, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
+            obj = (filename, self.query_id, transaction_id, goods_nomenclature_item_id, validity_start_date,
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber, operation_type)
             ret.append(obj)
         return ret
 
@@ -50,9 +52,10 @@ class XpathQueryTaric(object):
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
             ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
             obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
-                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber, operation_type)
             ret.append(obj)
         return ret
 
@@ -72,8 +75,10 @@ class XpathQueryTaric(object):
             action_code = self.get_value(elem, "oub:measure.condition/oub:action.code")
             certificate_type_code = self.get_value(elem, "oub:measure.condition/oub:certificate.type.code")
             certificate_code = self.get_value(elem, "oub:measure.condition/oub:certificate.code")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, transaction_id, measure_sid, measure_condition_sid, condition_code, component_sequence_number, action_code, certificate_type_code, certificate_code)
+            obj = (filename, self.query_id, transaction_id, measure_sid, measure_condition_sid, condition_code,
+                   component_sequence_number, action_code, certificate_type_code, certificate_code, operation_type)
             ret.append(obj)
         return ret
 
@@ -86,8 +91,10 @@ class XpathQueryTaric(object):
             productline_suffix = self.get_value(elem, "oub:goods.nomenclature/oub:producline.suffix")
             validity_start_date = self.get_value(elem, "oub:goods.nomenclature/oub:validity.start.date")
             validity_end_date = self.get_value(elem, "oub:goods.nomenclature/oub:validity.end.date")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, sid, productline_suffix, transaction_id, validity_start_date, validity_end_date)
+            obj = (filename, self.query_id, sid, productline_suffix, transaction_id, validity_start_date,
+                   validity_end_date, operation_type)
             ret.append(obj)
         return ret
 
@@ -103,8 +110,10 @@ class XpathQueryTaric(object):
             validity_end_date = self.get_value(elem, "oub:measure/oub:validity.end.date")
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid)
+            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, operation_type)
             ret.append(obj)
         return ret
 
@@ -113,7 +122,7 @@ class XpathQueryTaric(object):
         self.query = ".//oub:measure[oub:geographical.area = '{item}']/..".format(item=self.query_id)
         for elem in root.findall(self.query, self.namespaces):
             transaction_id = self.get_value(elem, "oub:transaction.id")
-            measure_sid = self.get_value(elem, "oub:measure.sid")
+            measure_sid = self.get_value(elem, "oub:measure/oub:measure.sid")
             goods_nomenclature_sid = self.get_value(elem, "oub:measure/oub:goods.nomenclature.sid")
             goods_nomenclature_item_id = self.get_value(elem, "oub:measure/oub:goods.nomenclature.item.id")
             validity_start_date = self.get_value(elem, "oub:measure/oub:validity.start.date")
@@ -121,9 +130,25 @@ class XpathQueryTaric(object):
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
             ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
             filename = Path(self.filename).stem
             obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
-                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber, operation_type)
+            ret.append(obj)
+        return ret
+
+    def run_query_quota(self, root):
+        ret = []
+        self.query = ".//oub:quota.order.number[oub:quota.order.number.id = '{item}']/..".format(item=self.query_id)
+        for elem in root.findall(self.query, self.namespaces):
+            transaction_id = self.get_value(elem, "oub:transaction.id")
+            operation_type = f.get_operation_type(self.get_value(elem, "oub:update.type"), "taric")
+            quota_order_number_sid = self.get_value(elem, "oub:quota.order.number/oub:quota.order.number.sid")
+            validity_start_date = self.get_value(elem, "oub:quota.order.number/oub:validity.start.date")
+            validity_end_date = self.get_value(elem, "oub:quota.order.number/oub:validity.end.date")
+            filename = Path(self.filename).stem
+            obj = (filename, self.query_id, transaction_id, quota_order_number_sid,
+                   validity_start_date, validity_end_date, operation_type)
             ret.append(obj)
         return ret
 

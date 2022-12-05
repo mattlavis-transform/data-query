@@ -110,8 +110,9 @@ class XpathMarkdown(object):
             self.markdown += "- End date = {item}\n".format(item=record[5])
             self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
-            self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
-            self.markdown += "- Quota order number = {item}\n\n".format(item=record[9])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[8])
+            self.markdown += "- Quota order number = {item}\n".format(item=record[9])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[10])
 
         self.write_report()
 
@@ -132,7 +133,8 @@ class XpathMarkdown(object):
             self.markdown += "- Measure type ID = {item}\n".format(item=record[7])
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[8])
             self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[9])
-            self.markdown += "- Quota order number = {item}\n\n".format(item=record[10])
+            self.markdown += "- Quota order number = {item}\n".format(item=record[10])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[11])
 
         self.write_report()
 
@@ -155,7 +157,8 @@ class XpathMarkdown(object):
             self.markdown += "- Component sequence number = {item}\n".format(item=record[6])
             self.markdown += "- Action code = {item}\n".format(item=record[7])
             self.markdown += "- Certificate type code = {item}\n".format(item=record[8])
-            self.markdown += "- Certificate code = {item}\n\n".format(item=record[9])
+            self.markdown += "- Certificate code = {item}\n".format(item=record[9])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[10])
 
             combined = record[4] + " : " + record[3]
             if record[3] not in unique_measures:
@@ -186,10 +189,11 @@ class XpathMarkdown(object):
             self.markdown += "### {filename}\n\n".format(filename=record[0])
             self.markdown += "- Transaction ID = {item}\n".format(item=record[4])
             self.markdown += "- Commodity code = {item}\n".format(item=record[1])
-            self.markdown += "- PLS = {item}\n".format(item=record[3])
-            self.markdown += "- SID = {item}\n".format(item=record[2])
+            self.markdown += "- Product Line Suffix = {item}\n".format(item=record[3])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[2])
             self.markdown += "- Start date = {item}\n".format(item=record[5])
-            self.markdown += "- End date = {item}\n\n".format(item=record[6])
+            self.markdown += "- End date = {item}\n".format(item=record[6])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[7])
 
         self.write_report()
 
@@ -202,14 +206,15 @@ class XpathMarkdown(object):
         self.markdown += "\n## Instances\n\n"
         for record in self.records:
             self.markdown += "### {item}\n\n".format(item=record[0])
-            self.markdown += "- Transaction ID = {item}\n".format(item=record[1])
-            self.markdown += "- Measure SID = {item}\n".format(item=record[2])
-            self.markdown += "- Commodity code = {item}\n".format(item=record[3])
-            self.markdown += "- Start date = {item}\n".format(item=record[4])
-            self.markdown += "- End date = {item}\n".format(item=record[5])
-            self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
-            self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
-            self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Measure SID = {item}\n".format(item=record[3])
+            self.markdown += "- Commodity code = {item}\n".format(item=record[4])
+            self.markdown += "- Start date = {item}\n".format(item=record[5])
+            self.markdown += "- End date = {item}\n".format(item=record[6])
+            self.markdown += "- Measure type ID = {item}\n".format(item=record[7])
+            self.markdown += "- Geographical area ID = {item}\n".format(item=record[8])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[9])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[10])
 
         self.write_report()
 
@@ -222,15 +227,16 @@ class XpathMarkdown(object):
         self.markdown += "\n## Instances\n\n"
         for record in self.records:
             self.markdown += "### {item}\n\n".format(item=record[0])
-            self.markdown += "- Transaction ID = {item}\n".format(item=record[1])
-            self.markdown += "- Measure SID = {item}\n".format(item=record[2])
-            self.markdown += "- Commodity code = {item}\n".format(item=record[3])
-            self.markdown += "- Start date = {item}\n".format(item=record[4])
-            self.markdown += "- End date = {item}\n".format(item=record[5])
-            self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
-            self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
-            self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
-            self.markdown += "- Order number = {item}\n\n".format(item=record[9])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Measure SID = {item}\n".format(item=record[3])
+            self.markdown += "- Commodity code = {item}\n".format(item=record[4])
+            self.markdown += "- Start date = {item}\n".format(item=record[5])
+            self.markdown += "- End date = {item}\n".format(item=record[6])
+            self.markdown += "- Measure type ID = {item}\n".format(item=record[7])
+            self.markdown += "- Geographical area ID = {item}\n".format(item=record[8])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[9])
+            self.markdown += "- Order number = {item}\n".format(item=record[10])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[11])
 
         self.write_report()
 
@@ -243,14 +249,15 @@ class XpathMarkdown(object):
         self.markdown += "\n## Instances\n\n"
         for record in self.records:
             self.markdown += "### {item}\n\n".format(item=record[0])
-            self.markdown += "- Transaction ID = {item}\n".format(item=record[1])
-            self.markdown += "- Measure SID = {item}\n".format(item=record[2])
-            self.markdown += "- Commodity code = {item}\n".format(item=record[3])
-            self.markdown += "- Start date = {item}\n".format(item=record[4])
-            self.markdown += "- End date = {item}\n".format(item=record[5])
-            self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
-            self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
-            self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Measure SID = {item}\n".format(item=record[3])
+            self.markdown += "- Commodity code = {item}\n".format(item=record[4])
+            self.markdown += "- Start date = {item}\n".format(item=record[5])
+            self.markdown += "- End date = {item}\n".format(item=record[6])
+            self.markdown += "- Measure type ID = {item}\n".format(item=record[7])
+            self.markdown += "- Geographical area ID = {item}\n".format(item=record[8])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[9])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[10])
 
         self.write_report()
 
@@ -263,10 +270,11 @@ class XpathMarkdown(object):
         self.markdown += "\n## Instances\n\n"
         for record in self.records:
             self.markdown += "### {item}\n\n".format(item=record[0])
-            self.markdown += "- Transaction ID = {item}\n".format(item=record[1])
-            self.markdown += "- Quota order number SID = {item}\n".format(item=record[2])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Quota order number SID = {item}\n".format(item=record[3])
             self.markdown += "- Start date = {item}\n".format(item=record[4])
             self.markdown += "- End date = {item}\n".format(item=record[5])
+            self.markdown += "- Operation type = {item}\n\n".format(item=record[6])
 
         self.write_report()
 

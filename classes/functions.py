@@ -134,3 +134,18 @@ def clear():
         _ = system('cls')
     else:
         _ = system("printf '\33c\e[3J'")
+
+def get_operation_type(value, scope):
+    if scope == "taric":
+        lookups = {
+            "1": "Update",
+            "2": "Delete",
+            "3": "Insert"
+        }
+    else:
+        lookups = {
+            "U": "Update",
+            "D": "Delete",
+            "C": "Insert"
+        }
+    return lookups[value]
