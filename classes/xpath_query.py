@@ -31,6 +31,8 @@ class XpathQuery(object):
         if process:
             if self.query_class == "measure":
                 ret = self.query_tool.run_query_measure(root)
+            elif self.query_class == "measure_quota":
+                ret = self.query_tool.run_query_measure_quota(root)
             elif self.query_class == "measure_condition":
                 ret = self.query_tool.run_query_measure_condition(root)
             elif self.query_class == "commodity":

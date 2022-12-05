@@ -26,16 +26,34 @@ class XpathQueryCds(object):
         for elem in root.findall(self.query, self.namespaces):
             transaction_id = "n/a"
             goods_nomenclature_sid = self.get_value(elem, "goodsNomenclature/sid")
-            goods_nomenclature_item_id = self.get_value(
-                elem, "goodsNomenclature/goodsNomenclatureItemId")
+            goods_nomenclature_item_id = self.get_value(elem, "goodsNomenclature/goodsNomenclatureItemId")
             validity_start_date = self.get_value(elem, "validityStartDate")
             validity_end_date = self.get_value(elem, "validityEndDate")
             measure_type_id = self.get_value(elem, "measureType/measureTypeId")
-            geographical_area_id = self.get_value(
-                elem, "geographicalArea/geographicalAreaId")
+            geographical_area_id = self.get_value(elem, "geographicalArea/geographicalAreaId")
+            ordernumber = self.get_value(elem, "ordernumber")
             filename = Path(self.filename).stem
             obj = (filename, self.query_id, transaction_id, goods_nomenclature_item_id, validity_start_date,
-                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid)
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
+            ret.append(obj)
+        return ret
+
+    def run_query_measure_quota(self, root):
+        ret = []
+        self.query = ".//Measure[ordernumber = '{item}']".format(item=self.query_id)
+        for elem in root.findall(self.query, self.namespaces):
+            transaction_id = "n/a"
+            measure_sid = self.get_value(elem, "sid")
+            goods_nomenclature_sid = self.get_value(elem, "goodsNomenclature/sid")
+            goods_nomenclature_item_id = self.get_value(elem, "goodsNomenclature/goodsNomenclatureItemId")
+            validity_start_date = self.get_value(elem, "validityStartDate")
+            validity_end_date = self.get_value(elem, "validityEndDate")
+            measure_type_id = self.get_value(elem, "measureType/measureTypeId")
+            geographical_area_id = self.get_value(elem, "geographicalArea/geographicalAreaId")
+            ordernumber = self.get_value(elem, "ordernumber")
+            filename = Path(self.filename).stem
+            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
             ret.append(obj)
         return ret
 
@@ -122,13 +140,11 @@ class XpathQueryCds(object):
             transaction_id = "n/a"
             measure_sid = self.get_value(elem, "sid")
             goods_nomenclature_sid = self.get_value(elem, "goodsNomenclature/sid")
-            goods_nomenclature_item_id = self.get_value(
-                elem, "goodsNomenclature/goodsNomenclatureItemId")
+            goods_nomenclature_item_id = self.get_value(elem, "goodsNomenclature/goodsNomenclatureItemId")
             validity_start_date = self.get_value(elem, "validityStartDate")
             validity_end_date = self.get_value(elem, "validityEndDate")
             measure_type_id = self.get_value(elem, "measureType/measureTypeId")
-            geographical_area_id = self.get_value(
-                elem, "geographicalArea/geographicalAreaId")
+            geographical_area_id = self.get_value(elem, "geographicalArea/geographicalAreaId")
             filename = Path(self.filename).stem
             obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id,
                    validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid)

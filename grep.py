@@ -11,8 +11,9 @@ load_dotenv('.env')
 # Get the argument
 if len(sys.argv) > 1:
     # xml_path = os.getenv('DIT_DATA_FOLDER')
-    xml_path = os.getenv('CDS_DATA_FOLDER')
-    # xml_path = os.path.join(os.getcwd(), "resources", "xml")
+    # xml_path = os.getenv('CDS_DATA_FOLDER')
+    xml_path = os.getenv('TGB_DATA_FOLDER')
+
     if len(sys.argv) > 2:
         try:
             add_chevrons = int(sys.argv[2])

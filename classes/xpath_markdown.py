@@ -29,6 +29,7 @@ class XpathMarkdown(object):
             parent_folder = tgb_folder
 
         self.measures_folder = os.path.join(parent_folder, "measures")
+        self.measure_quotas_folder = os.path.join(parent_folder, "measure_quotas")
         self.measure_conditions_folder = os.path.join(parent_folder, "measure_conditions")
         self.commodities_folder = os.path.join(parent_folder, "commodities")
         self.measure_types_folder = os.path.join(parent_folder, "measure_types")
@@ -42,6 +43,7 @@ class XpathMarkdown(object):
         self.make_folder(tgb_folder)
 
         self.make_folder(self.measures_folder)
+        self.make_folder(self.measure_quotas_folder)
         self.make_folder(self.measure_conditions_folder)
         self.make_folder(self.commodities_folder)
         self.make_folder(self.measure_types_folder)
@@ -59,6 +61,8 @@ class XpathMarkdown(object):
         self.filename = "{qc}_{qid}.md".format(qc=self.query_class, qid=self.query_id)
         if self.query_class == "measure":
             self.filepath = os.path.join(self.measures_folder, self.filename)
+        elif self.query_class == "measure_quota":
+            self.filepath = os.path.join(self.measure_conditions_folder, self.filename)
         elif self.query_class == "measure_condition":
             self.filepath = os.path.join(self.measure_conditions_folder, self.filename)
         elif self.query_class == "commodity":
@@ -76,6 +80,8 @@ class XpathMarkdown(object):
         self.get_unique_filenames()
         if self.query_class == "measure":
             self.write_markdown_measure()
+        elif self.query_class == "measure_quota":
+            self.write_markdown_measure_quotas()
         elif self.query_class == "measure_condition":
             self.write_markdown_measure_condition()
         elif self.query_class == "commodity":
@@ -105,6 +111,28 @@ class XpathMarkdown(object):
             self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
+            self.markdown += "- Quota order number = {item}\n\n".format(item=record[9])
+
+        self.write_report()
+
+    def write_markdown_measure_quotas(self):
+        self.markdown += "# Instances of measures assigned to quota {item}\n\n".format(item=self.query_id)
+        self.markdown += "## Files containing item\n\n"
+        for filename in self.unique_filenames:
+            self.markdown += "- {item}\n".format(item=filename)
+
+        self.markdown += "\n## Instances\n\n"
+        for record in self.records:
+            self.markdown += "### {item}\n\n".format(item=record[0])
+            self.markdown += "- Transaction ID = {item}\n".format(item=record[2])
+            self.markdown += "- Measure SID = {item}\n".format(item=record[3])
+            self.markdown += "- Commodity code = {item}\n".format(item=record[4])
+            self.markdown += "- Start date = {item}\n".format(item=record[5])
+            self.markdown += "- End date = {item}\n".format(item=record[6])
+            self.markdown += "- Measure type ID = {item}\n".format(item=record[7])
+            self.markdown += "- Geographical area ID = {item}\n".format(item=record[8])
+            self.markdown += "- Goods nomenclature SID = {item}\n".format(item=record[9])
+            self.markdown += "- Quota order number = {item}\n\n".format(item=record[10])
 
         self.write_report()
 

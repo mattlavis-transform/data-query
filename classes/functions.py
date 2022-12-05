@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 def cater_for_shortcuts(query_class):
     if query_class in ("m", "measures"):
         query_class = "measure"
+    if query_class in ("mq"):
+        query_class = "measure_quota"
     elif query_class in ("mc", "conditions"):
         query_class = "measure_condition"
     elif query_class in ("c", "commodities"):
@@ -72,7 +74,8 @@ def get_config_variables():
             "EU TGB data files"
         ]),
         inquirer.List("query_class", carousel=True, message="Look in {scope} for which type of data?", choices=[
-            "Measures",
+            "Measures by SID",
+            "Measures by quota order number",
             "Measure conditions",
             "Measure types",
             "Commodities",
@@ -114,7 +117,8 @@ def get_scope_from_enquirer(s):
 
 def get_query_class_from_enquirer(s):
     scopes = {
-        "Measures": "measure",
+        "Measures by SID": "measure",
+        "Measures by quota order number": "measure_quota",
         "Measure conditions": "measure_condition",
         "Measure types": "measure_type",
         "Commodities": "commodity",
