@@ -62,7 +62,7 @@ class XpathMarkdown(object):
         if self.query_class == "measure":
             self.filepath = os.path.join(self.measures_folder, self.filename)
         elif self.query_class == "measure_quota":
-            self.filepath = os.path.join(self.measure_conditions_folder, self.filename)
+            self.filepath = os.path.join(self.measure_quotas_folder, self.filename)
         elif self.query_class == "measure_condition":
             self.filepath = os.path.join(self.measure_conditions_folder, self.filename)
         elif self.query_class == "commodity":
@@ -230,6 +230,7 @@ class XpathMarkdown(object):
             self.markdown += "- Measure type ID = {item}\n".format(item=record[6])
             self.markdown += "- Geographical area ID = {item}\n".format(item=record[7])
             self.markdown += "- Goods nomenclature SID = {item}\n\n".format(item=record[8])
+            self.markdown += "- Order number = {item}\n\n".format(item=record[9])
 
         self.write_report()
 

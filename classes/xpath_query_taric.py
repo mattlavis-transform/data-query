@@ -31,8 +31,28 @@ class XpathQueryTaric(object):
             validity_end_date = self.get_value(elem, "oub:measure/oub:validity.end.date")
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
+            ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, transaction_id, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid)
+            obj = (filename, self.query_id, transaction_id, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
+            ret.append(obj)
+        return ret
+
+    def run_query_measure_quota(self, root):
+        ret = []
+        self.query = ".//oub:measure[oub:ordernumber = '{item}']/..".format(item=self.query_id)
+        for elem in root.findall(self.query, self.namespaces):
+            transaction_id = self.get_value(elem, "oub:transaction.id")
+            measure_sid = self.get_value(elem, "oub:measure/oub:measure.sid")
+            goods_nomenclature_sid = self.get_value(elem, "oub:measure/oub:goods.nomenclature.sid")
+            goods_nomenclature_item_id = self.get_value(elem, "oub:measure/oub:goods.nomenclature.item.id")
+            validity_start_date = self.get_value(elem, "oub:measure/oub:validity.start.date")
+            validity_end_date = self.get_value(elem, "oub:measure/oub:validity.end.date")
+            measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
+            geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
+            ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
+            filename = Path(self.filename).stem
+            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
             ret.append(obj)
         return ret
 
@@ -100,8 +120,10 @@ class XpathQueryTaric(object):
             validity_end_date = self.get_value(elem, "oub:measure/oub:validity.end.date")
             measure_type_id = self.get_value(elem, "oub:measure/oub:measure.type")
             geographical_area_id = self.get_value(elem, "oub:measure/oub:geographical.area")
+            ordernumber = self.get_value(elem, "oub:measure/oub:ordernumber")
             filename = Path(self.filename).stem
-            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid)
+            obj = (filename, self.query_id, transaction_id, measure_sid, goods_nomenclature_item_id, validity_start_date,
+                   validity_end_date, measure_type_id, geographical_area_id, goods_nomenclature_sid, ordernumber)
             ret.append(obj)
         return ret
 

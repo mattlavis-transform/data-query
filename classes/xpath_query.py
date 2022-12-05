@@ -25,7 +25,7 @@ class XpathQuery(object):
         try:
             root = ET.parse(self.filename)
         except Exception as e:
-            print("Exception", self.filename)
+            print("Xpath query exception", self.filename)
             process = False
 
         if process:
