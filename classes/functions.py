@@ -98,12 +98,12 @@ def get_config_variables():
     }
 
     answers = inquirer.prompt(questions, theme=inquirer.themes.load_theme_from_dict(inquirer_theme))
-    scope = get_scope_from_enquirer(answers["scope"])
-    query_class = get_query_class_from_enquirer(answers["query_class"])
+    scope = get_scope_from_enquirer(answers["scope"].strip())
+    query_class = get_query_class_from_enquirer(answers["query_class"].strip())
     ret = (
         scope,
         query_class,
-        answers["entity"]
+        answers["entity"].strip()
     )
     return ret
 
