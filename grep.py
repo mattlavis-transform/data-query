@@ -8,60 +8,72 @@ from dotenv import load_dotenv
 
 load_dotenv('.env')
 
-# Get the argument
 if len(sys.argv) > 1:
-    # xml_path = os.getenv('DIT_DATA_FOLDER')
-    # xml_path = os.getenv('CDS_DATA_FOLDER')
-    xml_path = os.getenv('TGB_DATA_FOLDER')
-
-    if len(sys.argv) > 2:
-        try:
-            add_chevrons = int(sys.argv[2])
-        except Exception as ex:
-            add_chevrons = 1
+    scope = sys.argv[1].lower()
+    scopes = {
+        "cds": 'CDS_DATA_FOLDER',
+        "tgb": 'TGB_DATA_FOLDER',
+        "dit": 'DIT_DATA_FOLDER',
+    }
+    if scope in scopes:
+        scope = scopes[scope]
     else:
-        add_chevrons = 1
+        scope = scopes["cds"]
 
-    term = decode(sys.argv[1], 'unicode_escape')
+    # Get the argument
+    if len(sys.argv) > 2:
+        # xml_path = os.getenv('DIT_DATA_FOLDER')
+        # xml_path = os.getenv('CDS_DATA_FOLDER')
+        xml_path = os.getenv(scope)
 
-    if add_chevrons == 1:
-        term = ">" + term + "<"
-    elif add_chevrons == 2:
-        term = "<" + term + ">"
+        if len(sys.argv) > 3:
+            try:
+                add_chevrons = int(sys.argv[3])
+            except Exception as ex:
+                add_chevrons = 1
+        else:
+            add_chevrons = 1
 
-    grepped_filename = term.translate(str.maketrans('', '', string.punctuation)) + ".txt"
-    grep_path = os.path.join(os.getcwd(), "resources", "grep")
-    grep_path2 = os.path.join(grep_path, grepped_filename)
+        term = decode(sys.argv[2], 'unicode_escape')
 
-    print("\nSearching for term '{term}' in folder '{grep_path2}'.\n".format(term=term, grep_path2=grep_path2))
+        if add_chevrons == 1:
+            term = ">" + term + "<"
+        elif add_chevrons == 2:
+            term = "<" + term + ">"
 
-    # grep_string = "grep -i -r --include='*.xml' '{term}' '{xml_path}' > '{grep_path2}'".format(
-    #     term=term,
-    #     xml_path=xml_path,
-    #     grep_path2=grep_path2
-    # )
-    grep_string = "grep -r --include='*.xml' '{term}' '{xml_path}' > '{grep_path2}'".format(
-        term=term,
-        xml_path=xml_path,
-        grep_path2=grep_path2
-    )
-    print("\n" + grep_string + "\n")
-    ret = os.system(grep_string)
+        grepped_filename = term.translate(str.maketrans('', '', string.punctuation)) + ".txt"
+        grep_path = os.path.join(os.getcwd(), "resources", "grep")
+        grep_path2 = os.path.join(grep_path, grepped_filename)
 
-    # Sort the file by date
-    file = open(grep_path2)
-    lines = file.readlines()
-    lines.sort(reverse=True)
-    file.close()
-    file = open(grep_path2, "w")
+        print("\nSearching for term '{term}' in folder '{grep_path2}'.\n".format(term=term, grep_path2=grep_path2))
 
-    for element in lines:
-        file.write(element)  # + "\n")
+        # grep_string = "grep -i -r --include='*.xml' '{term}' '{xml_path}' > '{grep_path2}'".format(
+        #     term=term,
+        #     xml_path=xml_path,
+        #     grep_path2=grep_path2
+        # )
+        grep_string = "grep -r --include='*.xml' '{term}' '{xml_path}' > '{grep_path2}'".format(
+            term=term,
+            xml_path=xml_path,
+            grep_path2=grep_path2
+        )
+        print("\n" + grep_string + "\n")
+        ret = os.system(grep_string)
 
-    file.close()
+        # Sort the file by date
+        file = open(grep_path2)
+        lines = file.readlines()
+        lines.sort(reverse=True)
+        file.close()
+        file = open(grep_path2, "w")
 
-    os.system('open "%s"' % grep_path)
+        for element in lines:
+            file.write(element)  # + "\n")
 
-else:
-    print("\nPlease provide a search term\n")
-    sys.exit()
+        file.close()
+
+        os.system('open "%s"' % grep_path)
+
+    else:
+        print("\nPlease provide a search term\n")
+        sys.exit()
